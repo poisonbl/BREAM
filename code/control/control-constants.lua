@@ -24,7 +24,12 @@ for _, entry in ipairs(rawEntries) do
 		elseif trimmed:match("^[%w%-]+$") then
 			literals[trimmed] = true
 		else
-			table.insert(patterns, trimmed)
+			local status, err = pcall(string.find, "", trimmed)
+			if status then
+				table.insert(patterns, trimmed)
+			else
+				log("Invalid Lua pattern '"..trimmed.."' Error: "..err)
+			end
 		end
 	end
 end
