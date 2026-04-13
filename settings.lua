@@ -34,6 +34,7 @@ addSetting("surfaces-to-spawn-nauvis-enemies", "string", "startup", "nauvis", ni
 addSetting("surfaces-to-spawn-gleba-enemies", "string", "startup", "gleba", nil, nil, true)
 addSetting("safe-tiles", "string", "startup",
 	"stone-path,concrete,refined-concrete,tarmac,hazard-concrete-left,hazard-concrete-right,refined-hazard-concrete-left,refined-hazard-concrete-right,foundation")
+addSetting("debug-safe-tiles", "bool", "startup", false)
 -- TODO add paving tiles from mods, eg the stone path from Space Exploration
 addSetting("spawn-every-seconds", "double", "startup", 2.0, 0.1)
 addSetting("enemy-spawner-health-multiplier", "double", "startup", 1.0, 0.0)

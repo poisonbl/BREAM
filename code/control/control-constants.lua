@@ -12,6 +12,7 @@ local function splitToList(s)
 end
 
 local rawEntries = splitToList(settings.startup["BREAM-safe-tiles"].value)
+local debugSafeTiles = settings.startup["BREAM-debug-safe-tiles"].value
 local literals = {}
 local patterns = {}
 local subgroups = {}
@@ -30,11 +31,16 @@ end
 
 Export.safeTiles = {}
 for tileName, tileProto in pairs(prototypes.tile) do
+	local reason = ""
 	local isSafe = literals[tileName] == true
+	if isSafe then
+		reason = "literal"
+	end
 
 	local subgroupName = tileProto.subgroup and tileProto.subgroup.name
 	if not isSafe and subgroupName and subgroups[subgroupName] then
 		isSafe = true
+		reason = "subgroup"
 	end
 
 	if not isSafe then
@@ -42,6 +48,7 @@ for tileName, tileProto in pairs(prototypes.tile) do
 			local status, match = pcall(string.find, tileName, pattern)
 			if status and match then
 				isSafe = true
+				reason = "pattern `"..pattern.."`"
 				break
 			end
 		end
@@ -49,6 +56,9 @@ for tileName, tileProto in pairs(prototypes.tile) do
 
 	if isSafe then
 		table.insert(Export.safeTiles, tileName)
+		if debugSafeTiles then log("Safe tile: "..tileName.." (@"..subgroupName..") "..reason) end
+	else
+		if debugSafeTiles then log("Unsafe tile: "..tileName.." (@"..subgroupName..")") end
 	end
 end
 
